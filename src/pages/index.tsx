@@ -28,8 +28,6 @@ export default function Home() {
 
   const { errors } = formState;
 
-  console.log(errors);
-
   return (
     <Flex w="100vw" h="100vh" align="center" justify="center">
       <Flex
