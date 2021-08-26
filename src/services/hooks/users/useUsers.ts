@@ -1,6 +1,6 @@
 import { useQuery } from 'react-query';
-import { User } from '../../models/User';
-import { api } from '../api';
+import { User } from '../../../models/User';
+import { api } from '../../api';
 
 interface ApiResponse {
   users: User[];

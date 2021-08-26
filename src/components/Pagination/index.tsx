@@ -71,7 +71,7 @@ export default function Pagination({
         <PaginationItem onPageChange={onPageChange} number={currentPage} isCurrent />
 
         {nextPages.length > 0 && nextPages.map(page => (
-          <PaginationItem onPageChange={onPageChange} number={page} />
+          <PaginationItem key={page} onPageChange={onPageChange} number={page} />
         ))}
 
         {(currentPage + siblingsCount) < lastPage && (
