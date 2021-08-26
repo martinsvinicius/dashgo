@@ -8,7 +8,7 @@ import { queryClient } from '../services/query/queryClient';
 import { AuthProvider } from '../auth/providers/AuthProvider';
 
 if (process.env.NODE_ENV === 'development') {
-  makeServer();
+  //makeServer();
 }
 
 function MyApp({ Component, pageProps }: AppProps) {
