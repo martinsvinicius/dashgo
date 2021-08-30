@@ -1,5 +1,6 @@
 import axios, { AxiosError } from 'axios';
 import { parseCookies, setCookie } from 'nookies';
+import { signOut } from '../../auth/providers/AuthProvider';
 
 //miragejs
 export const api = axios.create({
@@ -77,8 +78,10 @@ authApi.interceptors.response.use(
           });
         });
       } else {
-        // deslogar usuário
+        signOut();
       }
     }
+
+    return Promise.reject(error);
   }
 );
