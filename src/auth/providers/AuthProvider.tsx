@@ -2,11 +2,11 @@ import { ReactNode, useState } from 'react';
 import Router from 'next/router';
 import { destroyCookie, parseCookies, setCookie } from 'nookies';
 
-import { authApi } from '../../services/api';
 import { AuthContext } from '../contexts/AuthContext';
 import { SignInCredentials } from '../types/SignInCredentials';
 import { User } from '../types/User';
 import { useEffect } from 'react';
+import { authApi } from '../../services/api/authApiClient';
 
 type AuthProviderProps = {
   children: ReactNode;
