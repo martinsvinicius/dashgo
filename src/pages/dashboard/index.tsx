@@ -1,11 +1,8 @@
 import { Flex, SimpleGrid, Box, Text, theme } from '@chakra-ui/react';
-import { useEffect } from 'react';
 import dynamic from 'next/dynamic';
-import { useRouter } from 'next/router';
 
 import { Header } from '../../components/Header';
 import { Sidebar } from '../../components/Sidebar';
-import { useAuth } from '../../auth/hooks/useAuth';
 
 import { ApexOptions } from 'apexcharts';
 
@@ -69,50 +66,29 @@ const series = [
 ];
 
 export default function Dashboard() {
-  const { isAuthenticated, user } = useAuth();
-  const router = useRouter();
-
-  useEffect(() => {
-    if (!isAuthenticated) {
-      router.push('/');
-    }
-  }, [isAuthenticated]);
-
   return (
     <Flex direction="column" minH="100vh">
       <Header />
 
-      {isAuthenticated && (
-        <Flex width="100%" my="6" maxWidth={1480} mx="auto" px="6">
-          <Sidebar />
+      <Flex width="100%" my="6" maxWidth={1480} mx="auto" px="6">
+        <Sidebar />
 
-          <SimpleGrid flex="1" gap="4" minChildWidth="320px" align="flex-start">
-            <Box p={['6', '8']} bg="gray.800" borderRadius="8" pb="4">
-              <Text fontSize="lg" mb="4">
-                Inscritos da semana
-              </Text>
-              <Chart
-                options={options}
-                series={series}
-                type="area"
-                height={160}
-              />
-            </Box>
+        <SimpleGrid flex="1" gap="4" minChildWidth="320px" align="flex-start">
+          <Box p={['6', '8']} bg="gray.800" borderRadius="8" pb="4">
+            <Text fontSize="lg" mb="4">
+              Inscritos da semana
+            </Text>
+            <Chart options={options} series={series} type="area" height={160} />
+          </Box>
 
-            <Box p="8" bg="gray.800" borderRadius="8">
-              <Text fontSize="lg" mb="4">
-                Taxa de abertura
-              </Text>
-              <Chart
-                options={options}
-                series={series}
-                type="area"
-                height={160}
-              />
-            </Box>
-          </SimpleGrid>
-        </Flex>
-      )}
+          <Box p="8" bg="gray.800" borderRadius="8">
+            <Text fontSize="lg" mb="4">
+              Taxa de abertura
+            </Text>
+            <Chart options={options} series={series} type="area" height={160} />
+          </Box>
+        </SimpleGrid>
+      </Flex>
     </Flex>
   );
 }
