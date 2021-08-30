@@ -1,5 +1,6 @@
 import { ReactNode, useState } from 'react';
 import Router from 'next/router';
+import { setCookie } from 'nookies';
 
 import { authApi } from '../../services/api';
 import { AuthContext } from '../contexts/AuthContext';
@@ -10,6 +11,15 @@ type AuthProviderProps = {
   children: ReactNode;
 };
 
+type SignInResponse = {
+  email: string;
+  permissions: string[];
+  roles: string[];
+  name: string;
+  token: string;
+  refreshToken: string;
+};
+
 export function AuthProvider({ children }: AuthProviderProps) {
   const [user, setUser] = useState<User>();
 
@@ -17,17 +27,30 @@ export function AuthProvider({ children }: AuthProviderProps) {
 
   async function signIn({ email, password }: SignInCredentials) {
     try {
-      const response = await authApi.post<User>('sessions', {
+      const response = await authApi.post<SignInResponse>('sessions', {
         email,
         password,
       });
 
-      const { permissions, roles } = response.data;
+      const { permissions, roles, refreshToken, token, name } = response.data;
 
+      //setting cookies
+      setCookie(undefined, 'dashgo.token', token, {
+        maxAge: 60 * 60 * 24 * 30, // 30 days
+        path: '/',
+      });
+
+      setCookie(undefined, 'dashgo.refreshToken', refreshToken, {
+        maxAge: 60 * 60 * 24 * 30, // 30 days
+        path: '/',
+      });
+
+      //setting state
       setUser({
         email,
         permissions,
         roles,
+        name,
       });
 
       Router.push('/dashboard');
