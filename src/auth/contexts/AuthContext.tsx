@@ -4,7 +4,7 @@ import { User } from '../types/User';
 
 type AuthContextData = {
   signIn(credentials: SignInCredentials): Promise<void>;
-  signOut(): Promise<void>;
+  signOut(): void;
   user: User;
   isAuthenticated: boolean;
 };

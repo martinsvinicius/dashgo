@@ -21,9 +21,11 @@ type SessionResponse = {
   refreshToken: string;
 };
 
-export function removeCookies() {
+export function signOut() {
   destroyCookie(undefined, 'dashgo.token');
   destroyCookie(undefined, 'dashgo.refreshToken');
+
+  Router.push('/');
 }
 
 export function AuthProvider({ children }: AuthProviderProps) {
@@ -42,9 +44,7 @@ export function AuthProvider({ children }: AuthProviderProps) {
           setUser({ email, permissions, roles, name });
         })
         .catch(() => {
-          removeCookies();
-
-          Router.push('/');
+          signOut();
         });
     }
   }, []);
@@ -78,12 +78,6 @@ export function AuthProvider({ children }: AuthProviderProps) {
     } catch (error) {
       console.log(error);
     }
-  }
-
-  async function signOut() {
-    removeCookies();
-
-    Router.push('/');
   }
 
   return (
