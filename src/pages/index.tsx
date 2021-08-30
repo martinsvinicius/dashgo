@@ -5,6 +5,8 @@ import { yupResolver } from '@hookform/resolvers/yup';
 
 import { Input } from '../components/Form/Input';
 import { useAuth } from '../auth/hooks/useAuth';
+import { GetServerSideProps } from 'next';
+import { parseCookies } from 'nookies';
 
 type SignInFormData = {
   email: string;
@@ -18,7 +20,7 @@ const signInFormSchema = Yup.object().shape({
 
 export default function Home() {
   const { signIn, isAuthenticated } = useAuth();
-  
+
   const { register, handleSubmit, formState } = useForm({
     resolver: yupResolver(signInFormSchema),
   });
@@ -71,3 +73,20 @@ export default function Home() {
     </Flex>
   );
 }
+
+export const getServerSideProps: GetServerSideProps = async (ctx) => {
+  const cookies = parseCookies(ctx);
+
+  if (cookies['dashgo.token']) {
+    return {
+      redirect: {
+        destination: '/dashboard',
+        permanent: false,
+      },
+    };
+  }
+
+  return {
+    props: {},
+  };
+};
