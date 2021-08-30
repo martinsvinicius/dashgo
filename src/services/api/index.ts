@@ -1,7 +1,7 @@
 import axios, { AxiosError } from 'axios';
 import { GetServerSidePropsContext } from 'next';
 import { parseCookies, setCookie } from 'nookies';
-import { signOut } from '../../auth/providers/AuthProvider';
+import { removeCookies } from '../../auth/providers/AuthProvider';
 import { AuthTokenError } from '../errors/AuthTokenError';
 
 //miragejs
@@ -66,7 +66,7 @@ export function setupAuthApi(ctx: GetServerSidePropsContext = undefined) {
                 failedRequestQueue = [];
 
                 if (process.browser) {
-                  signOut();
+                  removeCookies();
                 }
               })
               .finally(() => {
@@ -88,7 +88,7 @@ export function setupAuthApi(ctx: GetServerSidePropsContext = undefined) {
           });
         } else {
           if (process.browser) {
-            signOut();
+            removeCookies();
           } else {
             return Promise.reject(new AuthTokenError());
           }

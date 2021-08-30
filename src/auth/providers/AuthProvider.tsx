@@ -21,7 +21,7 @@ type SessionResponse = {
   refreshToken: string;
 };
 
-export function signOut() {
+export function removeCookies() {
   destroyCookie(undefined, 'dashgo.token');
   destroyCookie(undefined, 'dashgo.refreshToken');
 }
@@ -42,7 +42,7 @@ export function AuthProvider({ children }: AuthProviderProps) {
           setUser({ email, permissions, roles, name });
         })
         .catch(() => {
-          signOut();
+          removeCookies();
 
           Router.push('/');
         });
@@ -80,8 +80,14 @@ export function AuthProvider({ children }: AuthProviderProps) {
     }
   }
 
+  async function signOut() {
+    removeCookies();
+
+    Router.push('/');
+  }
+
   return (
-    <AuthContext.Provider value={{ signIn, user, isAuthenticated }}>
+    <AuthContext.Provider value={{ signIn, signOut, user, isAuthenticated }}>
       {children}
     </AuthContext.Provider>
   );
