@@ -2,6 +2,7 @@ import axios, { AxiosError } from 'axios';
 import { GetServerSidePropsContext } from 'next';
 import { parseCookies, setCookie } from 'nookies';
 import { signOut } from '../../auth/providers/AuthProvider';
+import { AuthTokenError } from '../errors/AuthTokenError';
 
 //miragejs
 export const api = axios.create({
@@ -86,7 +87,11 @@ export function setupAuthApi(ctx: GetServerSidePropsContext = undefined) {
             });
           });
         } else {
-          signOut();
+          if (process.browser) {
+            signOut();
+          } else {
+            return Promise.reject(new AuthTokenError());
+          }
         }
       }
 
