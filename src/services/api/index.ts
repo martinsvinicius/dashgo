@@ -6,9 +6,12 @@ export const api = axios.create({
   baseURL: 'http://localhost:3000/api',
 });
 
-let cookies = parseCookies();
-
 //nodejs auth api
+
+let cookies = parseCookies();
+let isRefreshing = false;
+let failedRequestQueue = [];
+
 export const authApi = axios.create({
   baseURL: 'http://localhost:3333',
   headers: {
@@ -24,26 +27,55 @@ authApi.interceptors.response.use(
         cookies = parseCookies();
 
         const { 'dashgo.refreshToken': refreshToken } = cookies;
+        const originalConfig = error.config;
 
-        authApi
-          .post('/refresh', {
-            refreshToken,
-          }).then(({ data }) => {
-            const { token } = data;
+        if (!isRefreshing) {
+          isRefreshing = true;
 
-            //setting cookies
-            setCookie(undefined, 'dashgo.token', token, {
-              maxAge: 60 * 60 * 24 * 30, // 30 days
-              path: '/',
+          authApi
+            .post('/refresh', {
+              refreshToken,
+            })
+            .then(({ data }) => {
+              const { token } = data;
+
+              //setting cookies
+              setCookie(undefined, 'dashgo.token', token, {
+                maxAge: 60 * 60 * 24 * 30, // 30 days
+                path: '/',
+              });
+
+              setCookie(undefined, 'dashgo.refreshToken', data.refreshToken, {
+                maxAge: 60 * 60 * 24 * 30, // 30 days
+                path: '/',
+              });
+
+              authApi.defaults.headers['Authorization'] = `Bearer ${token}`;
+
+              failedRequestQueue.forEach((request) => request.onSuccess(token));
+              failedRequestQueue = [];
+            })
+            .catch((err) => {
+              failedRequestQueue.forEach((request) => request.onFailure(err));
+              failedRequestQueue = [];
+            })
+            .finally(() => {
+              isRefreshing = false;
             });
+        }
 
-            setCookie(undefined, 'dashgo.refreshToken', data.refreshToken, {
-              maxAge: 60 * 60 * 24 * 30, // 30 days
-              path: '/',
-            });
+        return new Promise((resolve, reject) => {
+          failedRequestQueue.push({
+            onSuccess: (token: string) => {
+              originalConfig.headers['Authorization'] = `Bearer ${token}`;
 
-            authApi.defaults.headers['Authorization'] = `Bearer ${token}`;
+              resolve(authApi(originalConfig));
+            },
+            onFailure: (err: AxiosError) => {
+              reject(err);
+            },
           });
+        });
       } else {
         // deslogar usuário
       }
