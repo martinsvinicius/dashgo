@@ -1,25 +1,27 @@
 import { Avatar, Box, Flex, Text } from '@chakra-ui/react';
+import { useAuth } from '../../auth/hooks/useAuth';
 
 interface ProfileProps {
   showProfileData: boolean;
 }
 
 export function Profile({ showProfileData }: ProfileProps) {
+  const { user } = useAuth();
+
   return (
     <Flex align="center">
       {showProfileData && (
         <Box mr="4" textAlign="right">
-          <Text>Vinicius Martins</Text>
+          <Text>{user?.name}</Text>
           <Text color="gray.300" fontSize="small">
-            vinicius.victor.sm@gmail.com
+            {user?.email}
           </Text>
         </Box>
       )}
 
       <Avatar
         size="md"
-        name="Vinicius Martins"
-        src="https://github.com/martinsvinicius.png"
+        name={user?.name}
       />
     </Flex>
   );
