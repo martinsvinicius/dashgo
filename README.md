@@ -1,11 +1,11 @@
-<center>
+<div align="center">
   <p style="font-size: 35px; margin: 0;">
   <strong>
       dashgo<span style="color: #d53f8c">.</span>
   </strong>
   </p>
 
-</center>
+</div>
 
 <hr />
 <br />
@@ -29,7 +29,7 @@ The app may appears to be simple, but it's not. Because, to build it we use the 
 
 <br />
 
-<center>
+<div align="center">
 <b>Before start, you will need to clone the api and run it on localhost:3333</b>
 
 <br />
@@ -38,7 +38,7 @@ The app may appears to be simple, but it's not. Because, to build it we use the 
   <a href="https://github.com/martinsvinicius">
   https://github.com/martinsvinicius</a>
 </b>
-</center>
+</div>
 
 <br />
 
@@ -95,7 +95,7 @@ The server will reload if you make edit.
 
 ## Author
 
-<center>
+<div align="center">
   <img style="border-radius: 50%;" src="https://github.com/martinsvinicius.png" width="100" height="100" />
 
   <br />
@@ -113,4 +113,4 @@ The server will reload if you make edit.
   <a href="https://www.linkedin.com/in/vinicius5g">
     <img alt="Perfil Linkedin" src="https://img.shields.io/badge/LinkedIn-0077B5?style=for-the-badge&logo=linkedin&logoColor=white" />
   </a>
-</center>
+</div>
