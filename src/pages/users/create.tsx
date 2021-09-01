@@ -7,8 +7,10 @@ import {
   VStack,
   HStack,
   Button,
+  useToast,
 } from '@chakra-ui/react';
 import { yupResolver } from '@hookform/resolvers/yup';
+import { AxiosError } from 'axios';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { useForm, SubmitHandler } from 'react-hook-form';
@@ -43,6 +45,7 @@ const createUserFormSchema = Yup.object().shape({
 
 export default function CreateUser() {
   const router = useRouter();
+  const toast = useToast();
 
   const createUser = useMutation(
     async (user: CreateUserFormData) => {
@@ -54,6 +57,23 @@ export default function CreateUser() {
       onSuccess: () => {
         queryClient.invalidateQueries('users');
       },
+      onError: (error: AxiosError) => {
+        if (error.response.status === 400) {
+          toast({
+            description: error.response.data.message,
+            position: 'top-right',
+            status: 'info',
+            duration: 3000,
+            isClosable: true,
+          });
+        } else {
+          toast({
+            description: 'Ocorreu um erro no servidor, tente novamente.',
+            position: 'top-right',
+            status: 'error',
+          });
+        }
+      },
     }
   );
 
@@ -62,9 +82,13 @@ export default function CreateUser() {
   });
 
   const handleCreateUser: SubmitHandler<CreateUserFormData> = async (data) => {
-    await createUser.mutateAsync(data);
-    
-    router.push('/users');
+    try {
+      await createUser.mutateAsync(data);
+
+      router.push('/users');
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   const { errors } = formState;
