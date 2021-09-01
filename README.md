@@ -1,10 +1,5 @@
 <div align="center">
-  <p style="font-size: 35px; margin: 0;">
-  <strong>
-      dashgo<span style="color: #d53f8c">.</span>
-  </strong>
-  </p>
-
+  <img src="./public/images/dashgo-logo.png" />
 </div>
 
 <hr />
@@ -35,8 +30,8 @@ The app may appears to be simple, but it's not. Because, to build it we use the 
 <br />
 
 <b>Api repository:
-  <a href="https://github.com/martinsvinicius">
-  https://github.com/martinsvinicius</a>
+  <a href="https://github.com/martinsvinicius/dashgo-auth-api">
+  https://github.com/martinsvinicius/dashgo-auth-api</a>
 </b>
 </div>
 
