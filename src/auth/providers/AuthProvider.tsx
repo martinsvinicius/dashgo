@@ -68,34 +68,30 @@ export function AuthProvider({ children }: AuthProviderProps) {
   }, []);
 
   async function signIn({ email, password }: SignInCredentials) {
-    try {
-      const { data } = await authApi.post<SessionResponse>('sessions', {
-        email,
-        password,
-      });
+    const { data } = await authApi.post<SessionResponse>('sessions', {
+      email,
+      password,
+    });
 
-      const { permissions, roles, refreshToken, token, name } = data;
+    const { permissions, roles, refreshToken, token, name } = data;
 
-      //setting cookies
-      setCookie(undefined, 'dashgo.token', token, {
-        maxAge: 60 * 60 * 24 * 30, // 30 days
-        path: '/',
-      });
+    //setting cookies
+    setCookie(undefined, 'dashgo.token', token, {
+      maxAge: 60 * 60 * 24 * 30, // 30 days
+      path: '/',
+    });
 
-      setCookie(undefined, 'dashgo.refreshToken', refreshToken, {
-        maxAge: 60 * 60 * 24 * 30, // 30 days
-        path: '/',
-      });
+    setCookie(undefined, 'dashgo.refreshToken', refreshToken, {
+      maxAge: 60 * 60 * 24 * 30, // 30 days
+      path: '/',
+    });
 
-      //setting state
-      setUser({ email, permissions, roles, name });
+    //setting state
+    setUser({ email, permissions, roles, name });
 
-      authApi.defaults.headers['Authorization'] = `Bearer ${token}`;
+    authApi.defaults.headers['Authorization'] = `Bearer ${token}`;
 
-      Router.push('/dashboard');
-    } catch (error) {
-      console.log(error);
-    }
+    Router.push('/dashboard');
   }
 
   return (

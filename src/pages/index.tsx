@@ -1,4 +1,4 @@
-import { Button, Flex, Stack } from '@chakra-ui/react';
+import { Button, Flex, Stack, useToast } from '@chakra-ui/react';
 import { SubmitHandler, useForm } from 'react-hook-form';
 import * as Yup from 'yup';
 import { yupResolver } from '@hookform/resolvers/yup';
@@ -6,6 +6,7 @@ import { yupResolver } from '@hookform/resolvers/yup';
 import { Input } from '../components/Form/Input';
 import { useAuth } from '../auth/hooks/useAuth';
 import { withSSRGuest } from '../utils/WithSSRGuest';
+import { AxiosError } from 'axios';
 
 type SignInFormData = {
   email: string;
@@ -19,13 +20,32 @@ const signInFormSchema = Yup.object().shape({
 
 export default function Home() {
   const { signIn, isAuthenticated } = useAuth();
+  const toast = useToast();
 
   const { register, handleSubmit, formState } = useForm({
     resolver: yupResolver(signInFormSchema),
   });
 
   const handleSignIn: SubmitHandler<SignInFormData> = async (data) => {
-    await signIn({ email: data.email, password: data.password });
+    signIn({ email: data.email, password: data.password }).catch(
+      (error: AxiosError) => {
+        if (error.response.status === 401) {
+          toast({
+            description: 'E-mail ou senha incorretos.',
+            duration: 3000,
+            status: 'warning',
+            position: 'top-right',
+          });
+        } else {
+          toast({
+            description: 'Ocorreu um erro no servidor, tente novamente.',
+            duration: 3000,
+            status: 'error',
+            position: 'top-right',
+          });
+        }
+      }
+    );
   };
 
   const { errors } = formState;
