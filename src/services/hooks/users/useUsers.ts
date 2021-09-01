@@ -1,5 +1,5 @@
 import { useQuery } from 'react-query';
-import { User } from '../../../models/User';
+import { User } from '../../../auth/types/User';
 import { authApi } from '../../api/authApiClient';
 
 interface ApiResponse {
@@ -21,7 +21,6 @@ export async function getUsers(currentPage: number): Promise<GetUsersResponse> {
 
   const users = data.users.map((user) => {
     return {
-      id: user.id,
       name: user.name,
       email: user.email,
       createdAt: new Date(user.createdAt).toLocaleDateString('pt-BR', {
@@ -29,6 +28,8 @@ export async function getUsers(currentPage: number): Promise<GetUsersResponse> {
         month: 'long',
         year: 'numeric',
       }),
+      permissions: user.permissions,
+      roles: user.roles
     };
   });
 

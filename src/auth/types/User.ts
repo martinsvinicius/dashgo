@@ -3,4 +3,5 @@ export type User = {
   permissions: string[];
   name: string;
   roles: string[];
+  createdAt: string;
 };

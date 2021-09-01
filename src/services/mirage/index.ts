@@ -6,7 +6,7 @@ import {
   ActiveModelSerializer,
 } from 'miragejs';
 import faker from 'faker';
-import { User } from '../../models/User';
+import { User } from '../../auth/types/User';
 
 export function makeServer() {
   const server = createServer({

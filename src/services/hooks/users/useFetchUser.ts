@@ -1,4 +1,4 @@
-import { User } from '../../../models/User';
+import { User } from '../../../auth/types/User';
 import { api } from '../../api';
 import { queryClient } from '../../query/queryClient';
 
