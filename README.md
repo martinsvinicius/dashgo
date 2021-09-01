@@ -95,7 +95,7 @@ The server will reload if you make edit.
 
   <br />
   <b>Vinicius Martins</b>
-  <hr />
+  <br />
   <br />
 
   <img src="https://img.shields.io/static/v1?label=Ignite&message=Rocketseat&color=7159c1&style=for-the-badge&logo=react" />
