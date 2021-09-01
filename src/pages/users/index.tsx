@@ -24,6 +24,7 @@ import { RiAddLine, RiPencilLine } from 'react-icons/ri';
 import { Header } from '../../components/Header';
 import Pagination from '../../components/Pagination';
 import { Sidebar } from '../../components/Sidebar';
+import { usePermission } from '../../hooks/usePermission';
 import { useFetchUser } from '../../services/hooks/users/useFetchUser';
 import { useUsers } from '../../services/hooks/users/useUsers';
 
@@ -31,17 +32,21 @@ export default function UserList() {
   const [currentPage, setCurrentPage] = useState(1);
   const { data, isLoading, isFetching, error } = useUsers(currentPage);
 
+  const userHasPermissionToCreateUsers = usePermission({
+    permissions: ['users.create'],
+  });
+
   const isWideVersion = useBreakpointValue({
     base: false,
     lg: true,
   });
 
-  //data prefetch example
-  async function handlePrefetchUser(userId: number) {
-    const user = await useFetchUser(userId);
+  // //data prefetch example
+  // async function handlePrefetchUser(userId: number) {
+  //   const user = await useFetchUser(userId);
 
-    console.log(user.name + ' fetched');
-  }
+  //   console.log(user.name + ' fetched');
+  // }
 
   return (
     <Box>
@@ -59,18 +64,20 @@ export default function UserList() {
               )}
             </Heading>
 
-            <NextLink href="/users/create" passHref>
-              <Button
-                as="a"
-                size="sm"
-                fontSize="sm"
-                cursor="pointer"
-                colorScheme="pink"
-                leftIcon={<Icon as={RiAddLine} fontSize="20" />}
-              >
-                Criar novo
-              </Button>
-            </NextLink>
+            {userHasPermissionToCreateUsers && (
+              <NextLink href="/users/create" passHref>
+                <Button
+                  as="a"
+                  size="sm"
+                  fontSize="sm"
+                  cursor="pointer"
+                  colorScheme="pink"
+                  leftIcon={<Icon as={RiAddLine} fontSize="20" />}
+                >
+                  Criar novo
+                </Button>
+              </NextLink>
+            )}
           </Flex>
 
           {isLoading ? (
@@ -103,9 +110,10 @@ export default function UserList() {
                       </Td>
                       <Td>
                         <Box>
-                          <Link color="purple.400" onMouseEnter={() => handlePrefetchUser(user.id)}>
+                          {/* <Link color="purple.400" onMouseEnter={() => handlePrefetchUser(user.id)}>
                             <Text fontWeight="bold">{user.name}</Text>
-                          </Link>
+                          </Link> */}
+                          <Text fontWeight="bold">{user.name}</Text>
                           <Text fontSize="sm" color="gray.300">
                             {user.email}
                           </Text>

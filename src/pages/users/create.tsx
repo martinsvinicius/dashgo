@@ -19,7 +19,7 @@ import * as Yup from 'yup';
 import { Input } from '../../components/Form/Input';
 import { Header } from '../../components/Header';
 import { Sidebar } from '../../components/Sidebar';
-import { api } from '../../services/api';
+import { authApi } from '../../services/api/authApiClient';
 import { queryClient } from '../../services/query/queryClient';
 
 type CreateUserFormData = {
@@ -46,12 +46,7 @@ export default function CreateUser() {
 
   const createUser = useMutation(
     async (user: CreateUserFormData) => {
-      const response = await api.post('/users', {
-        user: {
-          ...user,
-          createdAt: new Date(),
-        },
-      });
+      const response = await authApi.post('/users', user);
 
       return response.data.user;
     },

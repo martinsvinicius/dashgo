@@ -1,9 +1,10 @@
 import { useQuery } from 'react-query';
 import { User } from '../../../models/User';
-import { api } from '../../api';
+import { authApi } from '../../api/authApiClient';
 
 interface ApiResponse {
   users: User[];
+  total: number;
 }
 
 type GetUsersResponse = {
@@ -12,7 +13,7 @@ type GetUsersResponse = {
 }
 
 export async function getUsers(currentPage: number): Promise<GetUsersResponse> {
-  const { data, headers } = await api.get<ApiResponse>('/users', {
+  const { data, headers } = await authApi.get<ApiResponse>('/users', {
     params: {
       page: currentPage,
     },
@@ -31,7 +32,7 @@ export async function getUsers(currentPage: number): Promise<GetUsersResponse> {
     };
   });
 
-  const totalCount = Number(headers['x-total-count']);
+  const totalCount = data.total;
 
   return {
     users,
