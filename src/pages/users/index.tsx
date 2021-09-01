@@ -15,6 +15,7 @@ import {
   Thead,
   Tr,
   useBreakpointValue,
+  useToast,
 } from '@chakra-ui/react';
 import NextLink from 'next/link';
 import { useState } from 'react';
@@ -31,6 +32,7 @@ import { useUsers } from '../../services/hooks/users/useUsers';
 export default function UserList() {
   const [currentPage, setCurrentPage] = useState(1);
   const { data, isLoading, isFetching, error } = useUsers(currentPage);
+  const toast = useToast();
 
   const userHasPermissionToCreateUsers = usePermission({
     permissions: ['users.create'],
@@ -125,6 +127,13 @@ export default function UserList() {
                           <Button
                             as="a"
                             size="sm"
+                            onClick={() => {toast({
+                              description: 'Recurso ainda não disponível',
+                              status: 'info',
+                              position: 'top-right',
+                              duration: 3000,
+                              isClosable: true
+                            })}}
                             fontSize="sm"
                             cursor="pointer"
                             colorScheme="purple"
